@@ -102,7 +102,7 @@ function sendDataToBackend(name, gender, questions, answers, mobile, email, resu
     answer: answers[index]
   }));
 
-  fetch("http://localhost:5000/uploads", {
+  fetch(" https://bb98-192-248-93-25.ngrok-free.app/uploads", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
