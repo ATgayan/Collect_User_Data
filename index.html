@@ -2,171 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>User Data Collection Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Personality Quiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-   
-    * {
-      box-sizing: border-box;
+    body { font-family: 'Poppins', sans-serif; }
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
     }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f4f8;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .container {
-      background: #fff;
-      padding: 2rem 2.5rem;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      color: #333;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-
-    label {
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: #555;
-    }
-
-    input[type="email"],
-    input[type="tel"],
-    input[type="file"] {
-      padding: 0.6rem 0.8rem;
-      margin-bottom: 1.2rem;
-      border: 1.8px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-    }
-
-    input[type="email"]:focus,
-    input[type="tel"]:focus,
-    input[type="file"]:focus {
-      border-color: #007bff;
-      outline: none;
-    }
-
-    input[type="file"] {
-      padding: 0.3rem 0.8rem;
-    }
-
-    button {
-      background-color: #007bff;
-      color: white;
-      padding: 0.75rem;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-weight: 600;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    /* Responsive */
-    @media (max-width: 480px) {
-      .container {
-        padding: 1.5rem 1.8rem;
-      }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <h2>User Data Collection</h2>
-    <form id="userForm" action="#" method="post" enctype="multipart/form-data">
-      <label for="mobile">Mobile Number</label>
-      <input
-        type="tel"
-        id="mobile"
-        name="mobile"
-        placeholder="Enter mobile number : "
-        pattern="^\+?[0-9]{10,15}$"
-        required
-        title="Enter a valid mobile number with country code, e.g. +1234567890"
-      />
+<body class="bg-gradient-to-br from-indigo-50 via-white to-pink-50 min-h-screen flex items-center justify-center p-4">
 
-      <label for="email">Email Address</label>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        placeholder="example@domain.com"
-        required
-      />
+<!-- Loader -->
+<div id="loader" class="fixed inset-0 bg-white flex items-center justify-center z-50">
+  <div class="w-16 h-16 border-4 border-indigo-500 border-dashed rounded-full animate-spin"></div>
+</div>
 
-      <label for="photo">Upload Photo</label>
-      <input
-        type="file"
-        id="photo"
-        name="photo"
-        accept="image/*"
-        required
-      />
+<div id="app" class="flex flex-col lg:flex-row items-center justify-center w-full max-w-5xl space-y-6 lg:space-y-0 lg:space-x-10 fade-in hidden">
+  <div class="text-center lg:text-left">
+    <h1 class="text-4xl font-bold text-indigo-700">Welcome to the Character Finder!</h1>
+    <p class="mt-2 text-gray-600">Answer a few questions to discover what kind of person you are ✨</p>
+  </div>
+  <div class="w-full max-w-xl space-y-6">
+    <!-- Start -->
+    <div id="startBox" class="bg-white p-6 rounded-2xl shadow-md space-y-4">
+      <h2 class="text-2xl font-semibold text-indigo-600 text-center">🧠 Personality Quiz</h2>
+      <input type="text" id="name" placeholder="Your Name" class="w-full px-4 py-2 border rounded-lg" />
+      <select id="gender" class="w-full px-4 py-2 border rounded-lg">
+        <option value="">Select Gender</option>
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+        <option value="other">Other</option>
+      </select>
+      <button onclick="startQuiz()" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">Start Quiz</button>
+    </div>
 
-      <button type="submit">Submit</button>
-    </form>
+    <!-- Quiz -->
+    <div id="quizBox" class="bg-white p-6 rounded-2xl shadow-md space-y-4 hidden">
+      <h2 class="text-xl text-gray-700 font-medium" id="questionText">Loading...</h2>
+      <div class="flex space-x-4 justify-center">
+        <button onclick="answer('yes')" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">Yes</button>
+        <button onclick="answer('no')" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600">No</button>
+      </div>
+    </div>
+
+    <!-- Contact -->
+<div id="contactBox" class="bg-white p-6 rounded-2xl shadow-md space-y-4 hidden">
+  <h2 class="text-xl text-gray-700 font-medium">Almost there!</h2>
+  
+  <!-- Warning Message -->
+  <p class="text-red-500 text-sm font-medium">
+    ⚠️ Add correct mobile number and email to receive your results!
+  </p>
+  
+  <input type="text" id="mobile" placeholder="Mobile Number" class="w-full px-4 py-2 border rounded-lg" />
+  <input type="email" id="email" placeholder="Email Address" class="w-full px-4 py-2 border rounded-lg" />
+  <button onclick="showResult()" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">
+    See My Result
+  </button>
+</div>
+
+
+    <!-- Result -->
+    <div id="resultBox" class="bg-white p-6 rounded-2xl shadow-md text-center hidden">
+      <h2 class="text-2xl font-semibold text-green-600">Your Personality</h2>
+      <p class="text-gray-600 mt-4" id="resultText">Analyzing...</p>
+    </div>
   </div>
 
-  <script>
-    document.getElementById('userForm').addEventListener('submit', async function (e) {
-      e.preventDefault(); // prevent the default form submission
   
-      const form = e.target;
-      const formData = new FormData(form);
-  
-      const photo = formData.get("photo");
-      const maxSize = 5 * 1024 * 1024; // 5MB
-  
-      // Validate photo size
-      if (photo && photo.size > maxSize) {
-        alert('Photo size should be less than 5MB.');
-        return;
-      }
-  
-      try {
 
-        const response = await fetch('https://d734-103-77-64-145.ngrok-free.app/upload', {
-          method: 'POST',
-          body: formData,
-        });
+</div>
+
+<script src="script.js"></script>
   
-        if (response.ok) {
-          const result = await response.json();
-          alert('Form submitted successfully! 🎉');
-          console.log(result); // you can show success message here
-          form.reset(); // reset form after success
-        } else {
-          alert('Failed to submit form. 😓');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while submitting the form.');
-      }
-    });
-  </script>
-  
+
 </body>
 </html>
